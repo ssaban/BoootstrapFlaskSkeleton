@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for member in top_menue_items %}
+        <h1>{{ member.top_menue_item}}</h1>
+        <p> {{member.help}} </p>
+        <p> {{member.verbose }}</p>
+    {% endfor %}
+{% endblock content %}
