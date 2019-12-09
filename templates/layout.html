@@ -8,6 +8,15 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for ('static',filename='css/main.css') }}">
 
+    <!-- js for google charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/timeline/timeline.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/timeline/test_tl.js') }}"></script>
+
+
+
 
     {%if site %}
         <title>{{ site }}</title>
@@ -33,7 +42,7 @@
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="/about">About</a>
-                <a class="nav-item nav-link" href="/t-menue-1">T-MENUE-1</a>
+                <a class="nav-item nav-link" href="/SetTimeline">SetTimeline</a>
                 <a class="nav-item nav-link" href="/t-menue-2">T-MENUE-2</a>
                 <a class="nav-item nav-link" href="/t-menue-3">T-MENUE-3</a>
                 <a class="nav-item nav-link" href="/t-menue-4">T-MENUE-4</a>

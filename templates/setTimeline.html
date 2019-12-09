@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block content %}
+   <form action = "/SetTimeline" method = "POST" id="SetTimeline">
+
+       <h2> {{ title }}</h2>
+       <div id="timeline" style="height: 400px; width:1100px"></div>
+
+
+       <table>
+           <tr>
+               <th>
+                   <!-- Enter Product SMT Start -->
+                   <div class="form-group">
+           <fieldset class="border p-2">
+               <legend  class="w-auto">Operation</legend>
+
+               <label class="block"><input type="radio" name="RadioForProductUpdate" value="update" checked> Update</label>
+               <label class="block"><input type="radio" name="RadioForProductUpdate" value="remove"> Remove</label>
+               <p>Product <input type = "text" name = "Product" /></p>
+               <p>Build <input type = "text" name = "Build" /></p>
+
+               <script>
+                    if (datefield.type!="date"){ //if browser doesn't support input type="date", initialize date picker widget:
+                    jQuery(function($){ //on document.ready
+                        $('#SmtBuildDate').datepicker();
+                    })
+                }
+                </script>
+
+               <p>SMT Build Date <input type = "date" name = "SmtBuildDate"  id="SmtBuildDate"/></p>
+
+            </fieldset>
+       </div>
+               </th>
+               <th>
+                   <!-- Setup  Calendar events -->
+                   <div class="form-group">
+           <fieldset class="border p-2">
+                <legend  class="w-auto">
+                    <p>Set Calendar Events <input type="checkbox" id="setCalEvent" name="setCalEvent" onclick="myFunction()"></p>
+                </legend>
+               <table id="FilterDescriptors" style="display:none">
+                     <tr>
+                         <th>
+                             <label class="block"><input type="radio" name="RadioForEventUpdate" value="update" checked> Update</label>
+                             <label class="block"><input type="radio" name="RadioForEventUpdate" value="remove"> Remove</label>
+                         </th>
+                     </tr>
+                    <tr>
+                         <th> <p>Event <input type = "text" name = "Event" /></p> </th>
+                    </tr>
+                    <tr>
+                         <th> <p>Event Start <input type = "date" name = "EventStart"  id="EventStart"/></p> </th>
+                         <th> <p>Event End <input type = "date" name = "EventEnd"  id="EventEnd"/></p> </th>
+                     </tr>
+               </table>
+
+                   <script>
+                        if (datefield.type!="date"){ //if browser doesn't support input type="date", initialize date picker widget:
+                        jQuery(function($){ //on document.ready
+                            $('#SmtBuildDate').datepicker();
+                            $('#EventStart').datepicker();
+                            $('#EventEnd').datepicker();
+                        })
+                    }
+                    </script>
+
+            </fieldset>
+        </div>
+               </th>
+
+           </tr>
+       </table>
+
+       <script>
+            function myFunction() {
+            var checkBox = document.getElementById("setCalEvent");
+            var text = document.getElementById("FilterDescriptors");
+            if (checkBox.checked == true){
+               text.style.display = "block";
+            }
+            else {
+                text.style.display = "none";
+                  }
+            }
+       </script>
+
+       <button type="submit" value="add" name="add" class="btn btn-success" >Commit</button>
+      {% if can_confirm %}
+            <button type="submit" value="confirm" name="confirm"  formaction="/SetTimeline" class="btn btn-success" >Confirm Configs</button>
+      {% endif %}
+</form>
+
+
+{% endblock content %}
