@@ -15,7 +15,8 @@ google.charts.setOnLoadCallback(drawChart);
 
     dataTable.addRows([
 [ '\0','Now', new Date(), new Date() ],
-[ 'NEW','P1 (1/01)', new Date(2020, 0, 01), new Date(2020, 0, 01) ]
+[ 'NEW','P1 (1/01)', new Date(2020, 0, 01), new Date(2020, 0, 01) ],
+[ 'TEST','STUDY-DONE (1/01)', new Date(2020, 0, 01), new Date(2020, 0, 01) ]
 ]);
 
 
