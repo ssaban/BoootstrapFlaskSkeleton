@@ -1,10 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "bootstrap/base.html" %}
 
-</body>
+{% block title %}Skeleton{% endblock %}
+
+{% import "bootstrap/fixes.html" as fixes %}
+
+
+{% block head %}
+    {{ super() }}
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+
+        <!-- js for google charts -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+        <!--Load the AJAX API-->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/timeline/timeline.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/timeline/test_tl.js') }}"></script>
+
+{% endblock %}
+
+{% block style %}
+    {{super()}}
+    <link rel="stylesheet" type="text/css" href="{{ url_for ('static',filename='css/main.css') }}">
+
+{% endblock %}
+
+{% block navbar %}
+    <div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bootstrap Skeleton App</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/SetTimeline">SetTimeline</a></li>
+                <li><a href="/t-menue-2">T-MENUE-2</a></li>
+                <li><a href="/t-menue-3">T-MENUE-3</a></li>
+                <li><a href="/t-menue-4">T-MENUE-4</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}
 </html>
