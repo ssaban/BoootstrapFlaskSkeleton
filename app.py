@@ -125,7 +125,7 @@ def SetTimeline():
 
 
 
-    return render_template('bs_SetTimeline.html',title = 'Timeline')
+    return render_template('bs_setTimeline.html',title = 'Timeline')
 
 
 
