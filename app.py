@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from pprint import pprint
 from flask import Flask, flash, redirect, render_template, request, url_for
+from flask_bootstrap import Bootstrap
+
 from helper.timeline.timeline_builder import TimelineBuilder
 from os import environ, path
 import os
@@ -35,6 +37,7 @@ top_menue_descriptor = [
 
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 
 
 
@@ -55,7 +58,7 @@ def add_header(r):
 @app.route('/')
 @app.route('/home',methods = ['POST', 'GET'])
 def home():
-    return render_template('home.html')
+    return render_template('bs_index.html')
 
 @app.route('/about')
 def about():
@@ -122,7 +125,7 @@ def SetTimeline():
 
 
 
-    return render_template('SetTimeline.html',title = 'Timeline')
+    return render_template('bs_SetTimeline.html',title = 'Timeline')
 
 
 
