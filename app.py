@@ -11,31 +11,6 @@ import pwd
 import sys
 
 
-top_menue_descriptor = [
-    {
-        'top_menue_item':'About',
-        'help':'Activity to provide overall info about the app',
-        'verbose':'text to describe the about menue item',
-    },
-    {
-        'top_menue_item':'SetTimeline',
-        'help':'Use of Google Charts timeline widget to create project timeline',
-        'verbose':'text to describe this menue item',
-    },
-    {
-        'top_menue_item':'t-menue-2',
-        'help':'Activity to provide overall info about t-menue-2',
-        'verbose':'text to describe this menue item',
-    },
-    {
-        'top_menue_item':'t-menue-3',
-        'help':'Activity to provide overall info about t-menue-3',
-        'verbose':'text to describe this menue item',
-    }
-]
-
-
-
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
@@ -60,16 +35,6 @@ def add_header(r):
 def home():
     return render_template('bs_index.html')
 
-@app.route('/about')
-def about():
-    return render_template('about.html',top_menue_items = top_menue_descriptor)
-
-@app.route('/t-menue-3')
-@app.route('/t-menue-4')
-def menue_item():
-    return render_template('menue_item.html',page_title = 'T-MENUE<>')
-
-
 
 @app.route('/t-menue-2')
 def t_2():
@@ -78,7 +43,7 @@ def t_2():
 
 
 
-@app.route('/SetTimeline',methods = ['POST', 'GET'])
+@app.route('/GTimeline',methods = ['POST', 'GET'])
 def SetTimeline():
 
     print ("in SetTimeLine\n")
@@ -87,15 +52,17 @@ def SetTimeline():
 
         timelineCmd = request.form
 
-        if not 'RadioForEventUpdate' in timelineCmd.keys():
+
+        if not 'RadioForBlackoutEventUpdate' in timelineCmd.keys():
             print ("no need to set CalEvent\n")
             set_cal_event = 'off'
         else:
-            set_cal_event = timelineCmd['RadioForEventUpdate']
+            set_cal_event = timelineCmd['RadioForBlackoutEventUpdate']
 
 
         print ("???????????????????????????     DATA PASSED FOR SetTimeline")
         pprint(timelineCmd)
+
 
 
         store_dir = os.path.dirname(os.path.realpath(__file__)) + os.sep + "static/js/timeline"
@@ -109,23 +76,27 @@ def SetTimeline():
         print ("2========================================= before getCachedTimeline\n")
         tlb.getCachedTimeline("timeline")
 
-        tlb.processTimelineOp(timelineCmd['RadioForProductUpdate'],
-                           timelineCmd['Product'],
-                           timelineCmd['Build'],
-                           timelineCmd['SmtBuildDate'],
-                           set_cal_event,
-                           timelineCmd['Event'],
-                           timelineCmd['EventStart'],
-                           timelineCmd['EventEnd'],
+        tlb.processTimelineOp(timelineCmd['RadioForTimeLineLaneUpdate'],
+                              timelineCmd['LaneName'],
+                              timelineCmd['Event'],
+                              timelineCmd['EventStartDate'],
+                              timelineCmd['EventEndDate'],
+                              set_cal_event,
+                              timelineCmd['BlackoutEvent'],
+                              timelineCmd['BlackOutStart'],
+                              timelineCmd['BlackOutEnd'])
 
-                              )
+
+
+
+
 
         print ("3=========================================== FlushTimeLineCacheToFile\n")
         tlb.flushTimelineCacheToFile("timeline")
 
 
 
-    return render_template('bs_setTimeline.html',title = 'Timeline')
+    return render_template('bs_setTimeline.html',title = 'GTimeline')
 
 
 

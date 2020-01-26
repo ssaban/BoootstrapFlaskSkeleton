@@ -151,40 +151,44 @@ class TimelineBuilder():
         return t
 
     def processTimelineOp(self,
-                          op_type,  # modify or remove
-                          product,  # product name
-                          build,  # build name
-                          smt_build_date,  # smt build date in format yyyy-mm-dd
-                          setCalEvent,
-                          calEvent,
-                          EventStart_date,
-                          EventEnd_date):
+                          op_type,
+                          timeline_lane,
+                          tl_event,
+                          event_start_date,
+                          event_end_date,
+                          setBlackoutEvent,
+                          blackoutEvent,
+                          blackoutEventStartDate,
+                          blackoutEventEndDate ):
+
+
+
 
         print("HANDLE UPDATE / DELETE CALENDAR EVENT HERE ==================")
-        if setCalEvent == 'update':
-            print("EVENT {}   START {}   END {}".format(calEvent, EventStart_date, EventEnd_date))
+        if setBlackoutEvent == 'update':
+            print("EVENT {}   START {}   END {}".format(blackoutEvent, blackoutEventStartDate, blackoutEventEndDate))
 
-            valid_start_date, e_start = self.parseDate(EventStart_date)
-            valid_end_date, e_end = self.parseDate(EventEnd_date)
+            valid_start_date, e_start = self.parseDate(blackoutEventStartDate)
+            valid_end_date, e_end = self.parseDate(blackoutEventEndDate)
             if valid_start_date and valid_end_date:
                 if self.validDateRange(e_start, e_end):
                     print("VALID EVENT DATE  - Processing \n")
                     # self.updateCalendarEventMap('EVENTS',
                     self.updateCalendarEventMap('\\0',
-                                                calEvent,
+                                                blackoutEvent,
                                                 e_start,
                                                 e_end)
                 else:
                     print("IGNORE - END DATE {} EARLIER TNEN START DATE {}\n".format(e_end, e_start))
             else:
                 print("IGNORE - NON VALID END DATE >{}< OR START DATE >{}<\n".format(e_end, e_start))
-        elif setCalEvent == 'remove':
-            print("REMOVE EVENT {}\n".format(calEvent))
+        elif setBlackoutEvent == 'remove':
+            print("REMOVE EVENT {}\n".format(blackoutEvent))
             # if 'EVENTS' in self.calendarEventMap.keys():
             if '\\0' in list(self.calendarEventMap.keys()):
-                if calEvent in self.calendarEventMap['\\0']:
-                    # self.calendarEventMap['EVENTS'].pop(calEvent)
-                    self.calendarEventMap['\\0'].pop(calEvent)
+                if blackoutEvent in self.calendarEventMap['\\0']:
+                    # self.calendarEventMap['EVENTS'].pop(blackoutEvent)
+                    self.calendarEventMap['\\0'].pop(blackoutEvent)
 
         else:
             print("NO CAL EVENT ACTION\n")
@@ -193,38 +197,42 @@ class TimelineBuilder():
         pprint(self.calendarEventMap)
         print(">>>>>>>>>>>>>>>>>>>>>>>STORED EVENTS\n")
 
-        print("process op <{}> for product {} build {} on SMT BUILD DATE {}".format(op_type, product, build,
-                                                                                    smt_build_date))
+        print("process op <{}> for timeline_lane {} tl_event {} on SMT BUILD DATE {}".format(op_type, timeline_lane, tl_event,
+                                                                                    event_start_date))
 
         op_type = str(op_type)
-        product = str(product)
-        build = str(build)
-        valid_date, smt_start = self.parseDate(smt_build_date)
+        timeline_lane = str(timeline_lane)
+
+
+        tl_event = str(tl_event)
+        valid_date, smt_start = self.parseDate(event_start_date)
+        valid_date, smt_end = self.parseDate(event_end_date)
+
         print("CACHED TIMELINE")
         pprint(self.timelineMap)
 
         print("op type is <{}>".format(op_type))
 
-        print(product)
+        print(timeline_lane)
         print(smt_start)
 
         if op_type in 'update':
             print("UPDATE")
             if valid_date:
-                self.updateTimelineMap(product, build, smt_start, smt_start)
+                self.updateTimelineMap(timeline_lane, tl_event, smt_start, smt_end)
         if op_type in 'remove':
             print("REMOVE")
-            if product:
-                if build:
-                    print("REMOVE ONLY BUILD FROM PRODUCT")
-                    self.timelineMap[product].pop(build)
+            if timeline_lane:
+                if tl_event:
+                    print("REMOVE ONLY tl_event FROM TIMELINE_LANE")
+                    self.timelineMap[timeline_lane].pop(tl_event)
                 else:
-                    print("REMOVE PRODUCT")
-                    product = str(product)
-                    print("remove product {}".format(product))
+                    print("REMOVE timeline_lane")
+                    timeline_lane = str(timeline_lane)
+                    print("remove timeline_lane {}".format(timeline_lane))
                     pprint(self.timelineMap.pop)
-                    print("REMOVE PRODUCT - MAP AFTER POP")
-                    self.timelineMap.pop(product)
+                    print("REMOVE timeline_lane - MAP AFTER POP")
+                    self.timelineMap.pop(timeline_lane)
 
                     pprint(self.timelineMap.pop)
             else:
