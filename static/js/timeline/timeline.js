@@ -15,8 +15,12 @@ google.charts.setOnLoadCallback(drawChart);
 
     dataTable.addRows([
 [ '\0','Now', new Date(), new Date() ],
-[ 'NEW','P1 (1/01)', new Date(2020, 0, 01), new Date(2020, 0, 01) ],
-[ 'TEST','STUDY-DONE (1/01)', new Date(2020, 0, 01), new Date(2020, 0, 01) ]
+[ '\0','VAC', new Date(2020, 3, 17), new Date(2020, 3, 30) ],
+[ 'INT','P-1 (10/01)', new Date(2019, 9, 01), new Date(2019, 9, 01) ],
+[ 'INT','P-2 (11/20)', new Date(2019, 10, 20), new Date(2019, 10, 20) ],
+[ 'INT','OS-1 (1/27)', new Date(2020, 0, 27), new Date(2020, 0, 27) ],
+[ 'PREP','P-1 (9/30)', new Date(2019, 8, 30), new Date(2019, 8, 30) ],
+[ 'PREP','P-2 (11/19)', new Date(2019, 10, 19), new Date(2019, 10, 19) ]
 ]);
 
 
@@ -54,5 +58,8 @@ function nowLine(div){
       if(x == 0 && y == 0) {height = parseFloat($(this).attr('height'))}
   })
 
-
+var VACWord = $('#' + div + ' text:contains("VAC")');
+VACWord.prev().first().attr('height', height + 'px').attr('y', '0');   
+var NowWord = $('#' + div + ' text:contains("Now")');
+NowWord.prev().first().attr('height', height + 'px').attr('y', '0');  
 }
