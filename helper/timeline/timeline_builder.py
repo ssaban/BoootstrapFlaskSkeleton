@@ -101,34 +101,34 @@ class TimelineBuilder():
     tlb.updateTimelinedata(timelineCmd['RadioForProductUpdate'],
                            timelineCmd['Product'],
                            timelineCmd['Build'],
-                           timelineCmd['SmtBuildDate'])
+                           timelineCmd['eventBuildDate'])
 
     '''
 
-    def parseDate(self, smt_build_date):
-        smt_start = [0, 0, 0]
+    def parseDate(self, event_build_date):
+        event_start = [0, 0, 0]
         # safari date provided in format MM/DD/YYYY
         # chrome date provided in format YYYY-MM-DD
         print("BEFORE RE")
-        m = re.match(r'(\d*)\D*(\d*)\D*(\d*).*$', smt_build_date)
+        m = re.match(r'(\d*)\D*(\d*)\D*(\d*).*$', event_build_date)
         print("AFTER  RE")
         pprint(m)
         if len(m.group(1)) == 4:
             # process format YYYY-MM-DD
             mm = int(m.group(2))
             mm -= 1
-            smt_start = [str(m.group(1)), str(mm), str(m.group(3))]
+            event_start = [str(m.group(1)), str(mm), str(m.group(3))]
         elif len(m.group(1)) == 2:
             # process format MM/DD/YYYY
             mm = int(m.group(1))
             mm -= 1
-            smt_start = [str(m.group(3)), str(mm), str(m.group(2))]
+            event_start = [str(m.group(3)), str(mm), str(m.group(2))]
         else:
-            print("PROCESSING DATE IN FORMAT >{}<".format(smt_build_date))
+            print("PROCESSING DATE IN FORMAT >{}<".format(event_build_date))
             print("ERROR Group1 {}  is un supported length {} ".format(m.group(1), len(m.group(1))))
-            return False, smt_start
+            return False, event_start
 
-        return True, smt_start
+        return True, event_start
 
     def validDateRange(self, s, e):
         if int(e[0]) > int(s[0]):
@@ -197,7 +197,7 @@ class TimelineBuilder():
         pprint(self.calendarEventMap)
         print(">>>>>>>>>>>>>>>>>>>>>>>STORED EVENTS\n")
 
-        print("process op <{}> for timeline_lane {} tl_event {} on SMT BUILD DATE {}".format(op_type, timeline_lane, tl_event,
+        print("process op <{}> for timeline_lane {} tl_event {} on event BUILD DATE {}".format(op_type, timeline_lane, tl_event,
                                                                                     event_start_date))
 
         op_type = str(op_type)
@@ -205,8 +205,8 @@ class TimelineBuilder():
 
 
         tl_event = str(tl_event)
-        valid_date, smt_start = self.parseDate(event_start_date)
-        valid_date, smt_end = self.parseDate(event_end_date)
+        valid_date, event_start = self.parseDate(event_start_date)
+        valid_date, event_end = self.parseDate(event_end_date)
 
         print("CACHED TIMELINE")
         pprint(self.timelineMap)
@@ -214,12 +214,12 @@ class TimelineBuilder():
         print("op type is <{}>".format(op_type))
 
         print(timeline_lane)
-        print(smt_start)
+        print(event_start)
 
         if op_type in 'update':
             print("UPDATE")
             if valid_date:
-                self.updateTimelineMap(timeline_lane, tl_event, smt_start, smt_end)
+                self.updateTimelineMap(timeline_lane, tl_event, event_start, event_end)
         if op_type in 'remove':
             print("REMOVE")
             if timeline_lane:
@@ -247,8 +247,8 @@ class TimelineBuilder():
 
     def updateCalendarEventMap(self, event,
                                event_name,
-                               smt_start,
-                               smt_end):
+                               event_start,
+                               event_end):
 
         event = str(event)
         event_name = str(event_name)
@@ -263,15 +263,15 @@ class TimelineBuilder():
             if not event_name in list(event_map.keys()):
                 self.calendarEventMap[event][event_name] = {}
 
-        self.calendarEventMap[event][event_name]['smt_start_date'] = smt_start
-        self.calendarEventMap[event][event_name]['smt_end_date'] = smt_end
+        self.calendarEventMap[event][event_name]['event_start_date'] = event_start
+        self.calendarEventMap[event][event_name]['event_end_date'] = event_end
 
         pprint(self.calendarEventMap)
 
     def updateTimelineMap(self, product,
                           build_name,
-                          smt_start,
-                          smt_end):
+                          event_start,
+                          event_end):
 
         product = str(product)
         build_name = str(build_name)
@@ -300,10 +300,10 @@ class TimelineBuilder():
             if not build_name in list(product_map.keys()):
                 self.timelineMap[product][build_name] = {}
 
-        self.timelineMap[product][build_name]['smt_start_date'] = smt_start
-        self.timelineMap[product][build_name]['smt_end_date'] = smt_end
+        self.timelineMap[product][build_name]['event_start_date'] = event_start
+        self.timelineMap[product][build_name]['event_end_date'] = event_end
 
-        build_date_suffix = self.b_mm_dd(build_name, smt_start[1], smt_start[2])
+        build_date_suffix = self.b_mm_dd(build_name, event_start[1], event_start[2])
         self.timelineMap[product][build_name]['date_sufix'] = build_date_suffix
 
     '''
@@ -338,13 +338,13 @@ class TimelineBuilder():
                         if m.group(1) == '\\0':
                             self.updateCalendarEventMap(m.group(1),  # product
                                                         m.group(2),  # build_name,
-                                                        [m.group(3), m.group(4), m.group(5)],  # smt start
+                                                        [m.group(3), m.group(4), m.group(5)],  # event start
                                                         [m.group(6), m.group(7), m.group(8)])
                         else:
 
                             self.updateTimelineMap(m.group(1),  # product
                                                    m.group(2),  # build_name,
-                                                   [m.group(3), m.group(4), m.group(5)],  # smt start
+                                                   [m.group(3), m.group(4), m.group(5)],  # event start
                                                    [m.group(6), m.group(7), m.group(8)])
 
                         # print m.groups()
@@ -361,8 +361,8 @@ class TimelineBuilder():
                     for b in list(product_map.keys()):
                         print("check build {} in hash".format(b))
                         build_map = product_map[b]
-                        print("smt start key valeu {}   of b {}\n".format(build_map['smt_start_date'], b))
-                        if build_map['smt_start_date'] == ['0', '0', '0']:
+                        print("event start key valeu {}   of b {}\n".format(build_map['event_start_date'], b))
+                        if build_map['event_start_date'] == ['0', '0', '0']:
                             print("NOT VALID DATE - REMOVE")
                             self.timelineMap[p].pop(b)
 
@@ -410,12 +410,12 @@ class TimelineBuilder():
                 ms = eg_map[e]
                 line = "[ '{}','{}', new Date({}, {}, {}), new Date({}, {}, {}) ],".format(eg,
                                                                                            e,
-                                                                                           ms['smt_start_date'][0],
-                                                                                           ms['smt_start_date'][1],
-                                                                                           ms['smt_start_date'][2],
-                                                                                           ms['smt_end_date'][0],
-                                                                                           ms['smt_end_date'][1],
-                                                                                           ms['smt_end_date'][2])
+                                                                                           ms['event_start_date'][0],
+                                                                                           ms['event_start_date'][1],
+                                                                                           ms['event_start_date'][2],
+                                                                                           ms['event_end_date'][0],
+                                                                                           ms['event_end_date'][1],
+                                                                                           ms['event_end_date'][2])
                 line += "\n"
                 body += line
 
@@ -423,16 +423,16 @@ class TimelineBuilder():
             p_map = self.timelineMap[p]
             for b in list(p_map.keys()):
                 ms = p_map[b]
-                # build_and_date = "{} {}/{}".format(b,str(int(ms['smt_start_date'][1])+1),ms['smt_start_date'][2])
+                # build_and_date = "{} {}/{}".format(b,str(int(ms['event_start_date'][1])+1),ms['event_start_date'][2])
                 line = "[ '{}','{}', new Date({}, {}, {}), new Date({}, {}, {}) ],".format(p,
                                                                                            # b,
                                                                                            ms['date_sufix'],
-                                                                                           ms['smt_start_date'][0],
-                                                                                           ms['smt_start_date'][1],
-                                                                                           ms['smt_start_date'][2],
-                                                                                           ms['smt_end_date'][0],
-                                                                                           ms['smt_end_date'][1],
-                                                                                           ms['smt_end_date'][2])
+                                                                                           ms['event_start_date'][0],
+                                                                                           ms['event_start_date'][1],
+                                                                                           ms['event_start_date'][2],
+                                                                                           ms['event_end_date'][0],
+                                                                                           ms['event_end_date'][1],
+                                                                                           ms['event_end_date'][2])
                 line += "\n"
                 body += line
 
