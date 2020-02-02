@@ -36,6 +36,12 @@ def home():
     return render_template('bs_index.html')
 
 
+@app.route('/Guide')
+def guide():
+    return render_template('bs_guide.html')
+
+
+
 @app.route('/t-menue-2')
 def t_2():
     #return render_template('home.html',team = team_1)

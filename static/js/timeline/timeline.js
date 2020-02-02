@@ -16,11 +16,14 @@ google.charts.setOnLoadCallback(drawChart);
     dataTable.addRows([
 [ '\0','Now', new Date(), new Date() ],
 [ '\0','VAC', new Date(2020, 3, 17), new Date(2020, 3, 30) ],
-[ 'INT','P-1 (10/01)', new Date(2019, 9, 01), new Date(2019, 9, 01) ],
-[ 'INT','P-2 (11/20)', new Date(2019, 10, 20), new Date(2019, 10, 20) ],
-[ 'INT','OS-1 (1/27)', new Date(2020, 0, 27), new Date(2020, 0, 27) ],
-[ 'PREP','P-1 (9/30)', new Date(2019, 8, 30), new Date(2019, 8, 30) ],
-[ 'PREP','P-2 (11/19)', new Date(2019, 10, 19), new Date(2019, 10, 19) ]
+[ '\0','ISR', new Date(2020, 2, 05), new Date(2020, 2, 17) ],
+[ 'Connect','P-1 (8/26)', new Date(2019, 7, 26), new Date(2019, 7, 26) ],
+[ 'Connect','OK4-2 (9/04)', new Date(2019, 8, 04), new Date(2019, 8, 04) ],
+[ 'Connect','P2 (10/10)', new Date(2019, 9, 10), new Date(2019, 9, 10) ],
+[ 'Connect','OK4-OSI (11/13)', new Date(2019, 10, 13), new Date(2019, 10, 13) ],
+[ 'Connect','OSI-Set (1/31)', new Date(2020, 0, 31), new Date(2020, 0, 31) ],
+[ 'Assess','OSI(1/31) (1/31)', new Date(2020, 0, 31), new Date(2020, 0, 31) ],
+[ 'Interviews','Interview (1/31)', new Date(2020, 0, 31), new Date(2020, 0, 31) ]
 ]);
 
 
@@ -60,6 +63,8 @@ function nowLine(div){
 
 var VACWord = $('#' + div + ' text:contains("VAC")');
 VACWord.prev().first().attr('height', height + 'px').attr('y', '0');   
+var ISRWord = $('#' + div + ' text:contains("ISR")');
+ISRWord.prev().first().attr('height', height + 'px').attr('y', '0');   
 var NowWord = $('#' + div + ' text:contains("Now")');
 NowWord.prev().first().attr('height', height + 'px').attr('y', '0');  
 }

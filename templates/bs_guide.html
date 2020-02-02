@@ -1,0 +1,207 @@
+{% extends "bs_base.html" %}
+
+{% block title %}Skeketon{% endblock %}
+
+
+{% block head %}
+  {{ super() }}
+<!--
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+-->
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+
+td, th {
+  border: 1px solid #dddddd;
+
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dbdbdb;
+}
+
+</style>
+
+<style>
+table {
+  width:100%;
+}
+    table#t01 tr:nth-child(even) {
+  background-color: #eee;
+}
+table#t01 tr:nth-child(odd) {
+ background-color: #fff;
+}
+table#t01 th {
+  background-color: #4285F4;
+  color: white;
+  font-family: arial, sans-serif;
+}
+</style>
+{% endblock %}
+
+
+
+{% block page_content %}
+    <div class="page-header">
+        <h2>Guide</h2>
+    </div>
+
+    <table id="t01">
+        <tr>
+            <th>Step</th>
+            <th>What To Do </th>
+            <th>How To Do It</th>
+        </tr>
+
+        <tr>
+            <td>1</td>
+            <td>Set Up Your GCS Free Tier Account</td>
+            <td>Follow guide at <a href="https://cloud.google.com/">GCS Website</a> </td>
+        </tr>
+
+        <tr>
+            <td>2</td>
+                <td>Learn about App Engine and how to deploy Pyton 3 app to App Engine </td>
+                <td>
+                    <table>
+                        <tr><th>Read Following Tutorials:</th></tr>
+                        <tr><td>
+                                <a href="https://codelabs.developers.google.com/codelabs/cloud-app-engine-python3/index.html?index=..%2F..index#0">Getting Started with App Engine</a>
+                            </td>
+                        </tr>
+                        <tr><td>
+                                <a href="https://cloud.google.com/appengine/docs/standard/python3/building-app/">Building a Python 3.7 app on App Engine</a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+         </tr>
+        <tr>
+            <td>3</td>
+            <td>Create a new project</td>
+            <td>From GC Shell:  gcloud projects create [YOUR_PROJECT_ID] --set-as-default </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Verify Project Created </td>
+            <td>From GC Shell:  gcloud projects describe [YOUR_PROJECT_ID] </td>
+        </tr>
+        <tr>
+            <td>5</td>
+                <td>Configure your App with app.yaml </td>
+                <td>
+                    <table>
+                        <tr><th>Read Following Tutorials:</th></tr>
+                        <tr><td>
+                                <a href="https://cloud.google.com/appengine/docs/flexible/python/runtime#application_startup">
+                                    The Python Runtime
+                                </a>
+                            </td>
+                        </tr>
+                        <tr><td>
+                                <a href="https://cloud.google.com/appengine/docs/flexible/python/configuring-your-app-with-app-yaml">Configuring your App with app.yaml</a>
+
+                            </td>
+                        </tr>
+                        <tr><td>
+                            <a href="https://cloud.google.com/appengine/docs/flexible/python/reference/app-yaml">app.ymal configuration file</a>
+                             </td>
+                        </tr>
+                        <tr> <td>Note1: Flask development (WSGI) server is used in tutorials generally</td> </tr>
+                        <tr><td>Note2: when deploy to GC - ensure set app.yaml to uses a production server</td></tr>
+                    </table>
+                </td>
+         </tr>
+        <tr>
+            <td>6</td>
+                <td>Clone and test your App on GC Shell </td>
+                <td>
+                    <table>
+                        <tr><th>Do from GC Shell</th></tr>
+                        <tr><td>
+                            Create an isolated Python environment in a directory external to your project and activate it:
+                            </td>
+                        </tr>
+                        <tr><td>
+                            python3 -m venv env<br>
+                            source env/bin/activate
+                            </td>
+                        </tr>
+                        <tr><td>Navigate to your project directory and , clone and install dependencies:  </td></tr>
+                            
+                        <tr> <td>git clone [ your Git repo]   <br>
+                            cd YOUR_PROJECT<br>
+                            pip install  -r requirements.txt
+
+                        </td> </tr>
+                        <tr><td>Run the app</td></tr>
+                        <tr><td>python app.py</td></tr>
+                        <tr><td>In your web browser, enter the following address:<br>
+                            Note: If you are <using Cloud Shell, in the toolbar, click Web Preview and select Preview on port 8080 instead.
+
+                        </td></tr>
+                        <tr><td>http://localhost:8080</td> </tr>
+                        
+
+
+                    </table>
+                </td>
+         </tr>
+        <tr>
+            <td>7</td>
+            <td>Enable Cloud Build for your project </td>
+            <td>From Google Cloud API and Services</td>
+        </tr>
+        <tr>
+            <td>8</td>
+                <td>Deploy to App Engin </td>
+                <td>
+                    <table>
+                        <tr><th>Do from GC Shell</th></tr>
+                        <tr><td>
+                            Deploy <br>
+                             <a href="https://cloud.google.com/appengine/docs/standard/python3/quickstart#deploy_and_run_hello_world_on_app_engine">(Learn about the optional flags)</a>
+                            </td>
+                        </tr>
+                        <tr><td>gcloud app deploy</td></tr>
+                        <tr><td>Launch your browser to view the app<br>
+                                where YOUR_PROJECT_ID represents your Google Cloud project ID
+                        </td></tr>
+                        <tr><td> http://YOUR_PROJECT_ID.appspot.com</td></tr>
+
+                        <tr><td>Brows all your apps on GC Shell  </td></tr>
+                        <tr><td>gcloud app browse</td></tr>
+
+
+
+
+                    </table>
+                </td>
+         </tr>
+
+     </table>
+
+
+
+
+    </div>
+
+
+
+
+
+
+{% endblock %}

@@ -93,24 +93,24 @@ class TimelineBuilder():
         self.store_dir = work_dir
         print("store dir is {}".format(self.store_dir))
 
-        self.timelineMap = {}  # empty map to keep time line for all products
+        self.timelineMap = {}  # empty map to keep time line for all event_lanes
         self.calendarEventMap = {}  # empty map to keep calendar events (holidays, WWDC ect)
         self.cached_timeline = False
 
     ''' 
-    tlb.updateTimelinedata(timelineCmd['RadioForProductUpdate'],
-                           timelineCmd['Product'],
-                           timelineCmd['Build'],
-                           timelineCmd['eventBuildDate'])
+    tlb.updateTimelinedata(timelineCmd['RadioForevent_laneUpdate'],
+                           timelineCmd['event_lane'],
+                           timelineCmd['event'],
+                           timelineCmd['eventeventDate'])
 
     '''
 
-    def parseDate(self, event_build_date):
+    def parseDate(self, event_event_date):
         event_start = [0, 0, 0]
         # safari date provided in format MM/DD/YYYY
         # chrome date provided in format YYYY-MM-DD
         print("BEFORE RE")
-        m = re.match(r'(\d*)\D*(\d*)\D*(\d*).*$', event_build_date)
+        m = re.match(r'(\d*)\D*(\d*)\D*(\d*).*$', event_event_date)
         print("AFTER  RE")
         pprint(m)
         if len(m.group(1)) == 4:
@@ -124,7 +124,7 @@ class TimelineBuilder():
             mm -= 1
             event_start = [str(m.group(3)), str(mm), str(m.group(2))]
         else:
-            print("PROCESSING DATE IN FORMAT >{}<".format(event_build_date))
+            print("PROCESSING DATE IN FORMAT >{}<".format(event_event_date))
             print("ERROR Group1 {}  is un supported length {} ".format(m.group(1), len(m.group(1))))
             return False, event_start
 
@@ -197,7 +197,7 @@ class TimelineBuilder():
         pprint(self.calendarEventMap)
         print(">>>>>>>>>>>>>>>>>>>>>>>STORED EVENTS\n")
 
-        print("process op <{}> for timeline_lane {} tl_event {} on event BUILD DATE {}".format(op_type, timeline_lane, tl_event,
+        print("process op <{}> for timeline_lane {} tl_event {} on event lane_event DATE {}".format(op_type, timeline_lane, tl_event,
                                                                                     event_start_date))
 
         op_type = str(op_type)
@@ -268,43 +268,43 @@ class TimelineBuilder():
 
         pprint(self.calendarEventMap)
 
-    def updateTimelineMap(self, product,
-                          build_name,
+    def updateTimelineMap(self, event_lane,
+                          lane_event_name,
                           event_start,
                           event_end):
 
-        product = str(product)
-        build_name = str(build_name)
+        event_lane = str(event_lane)
+        lane_event_name = str(lane_event_name)
 
-        # check if build name is already in format of
+        # check if lane_event name is already in format of
         # {} ({}/{})".format(b,str(month),dd)
-        print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >{}<\n".format(build_name))
-        m = re.match(r'(\S*)(.*$)', build_name)
-        build_name = m.group(1)
+        print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >{}<\n".format(lane_event_name))
+        m = re.match(r'(\S*)(.*$)', lane_event_name)
+        lane_event_name = m.group(1)
         bd = m.group(2)
-        print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >{}<  >{}<\n".format(build_name, bd))
+        print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& >{}<  >{}<\n".format(lane_event_name, bd))
 
-        # build name might be in format build_name(mm/dd)
-        # hash only keep build name
-        # m = re.match(r'(.*)*\s\(.*\).*$', build_name)
+        # lane_event name might be in format lane_event_name(mm/dd)
+        # hash only keep lane_event name
+        # m = re.match(r'(.*)*\s\(.*\).*$', lane_event_name)
         # print m
-        # build_name = m.group(1)
+        # lane_event_name = m.group(1)
 
-        print("IN updateTimelineMap for product <{}> build name<{}> ".format(product, build_name))
+        print("IN updateTimelineMap for event_lane <{}> lane_event name<{}> ".format(event_lane, lane_event_name))
 
-        if not product in list(self.timelineMap.keys()):
-            self.timelineMap[product] = {}
-            self.timelineMap[product][build_name] = {}
+        if not event_lane in list(self.timelineMap.keys()):
+            self.timelineMap[event_lane] = {}
+            self.timelineMap[event_lane][lane_event_name] = {}
         else:
-            product_map = self.timelineMap[product]
-            if not build_name in list(product_map.keys()):
-                self.timelineMap[product][build_name] = {}
+            event_lane_map = self.timelineMap[event_lane]
+            if not lane_event_name in list(event_lane_map.keys()):
+                self.timelineMap[event_lane][lane_event_name] = {}
 
-        self.timelineMap[product][build_name]['event_start_date'] = event_start
-        self.timelineMap[product][build_name]['event_end_date'] = event_end
+        self.timelineMap[event_lane][lane_event_name]['event_start_date'] = event_start
+        self.timelineMap[event_lane][lane_event_name]['event_end_date'] = event_end
 
-        build_date_suffix = self.b_mm_dd(build_name, event_start[1], event_start[2])
-        self.timelineMap[product][build_name]['date_sufix'] = build_date_suffix
+        event_date_suffix = self.b_mm_dd(lane_event_name, event_start[1], event_start[2])
+        self.timelineMap[event_lane][lane_event_name]['date_sufix'] = event_date_suffix
 
     '''
         getCachedTimeLine
@@ -336,14 +336,14 @@ class TimelineBuilder():
 
                         # if m.group(1) == 'EVENTS' :
                         if m.group(1) == '\\0':
-                            self.updateCalendarEventMap(m.group(1),  # product
-                                                        m.group(2),  # build_name,
+                            self.updateCalendarEventMap(m.group(1),  # event_lane
+                                                        m.group(2),  # lane_event_name,
                                                         [m.group(3), m.group(4), m.group(5)],  # event start
                                                         [m.group(6), m.group(7), m.group(8)])
                         else:
 
-                            self.updateTimelineMap(m.group(1),  # product
-                                                   m.group(2),  # build_name,
+                            self.updateTimelineMap(m.group(1),  # event_lane
+                                                   m.group(2),  # lane_event_name,
                                                    [m.group(3), m.group(4), m.group(5)],  # event start
                                                    [m.group(6), m.group(7), m.group(8)])
 
@@ -356,13 +356,13 @@ class TimelineBuilder():
                 pprint(self.calendarEventMap)
                 print("===================Clean Non Defined Dates from Cache\n")
                 for p in list(self.timelineMap.keys()):
-                    product_map = self.timelineMap[p]
-                    print("check product {} in hash".format(p))
-                    for b in list(product_map.keys()):
-                        print("check build {} in hash".format(b))
-                        build_map = product_map[b]
-                        print("event start key valeu {}   of b {}\n".format(build_map['event_start_date'], b))
-                        if build_map['event_start_date'] == ['0', '0', '0']:
+                    event_lane_map = self.timelineMap[p]
+                    print("check event_lane {} in hash".format(p))
+                    for b in list(event_lane_map.keys()):
+                        print("check lane_event {} in hash".format(b))
+                        event_map = event_lane_map[b]
+                        print("event start key valeu {}   of b {}\n".format(event_map['event_start_date'], b))
+                        if event_map['event_start_date'] == ['0', '0', '0']:
                             print("NOT VALID DATE - REMOVE")
                             self.timelineMap[p].pop(b)
 
@@ -423,7 +423,7 @@ class TimelineBuilder():
             p_map = self.timelineMap[p]
             for b in list(p_map.keys()):
                 ms = p_map[b]
-                # build_and_date = "{} {}/{}".format(b,str(int(ms['event_start_date'][1])+1),ms['event_start_date'][2])
+                # event_and_date = "{} {}/{}".format(b,str(int(ms['event_start_date'][1])+1),ms['event_start_date'][2])
                 line = "[ '{}','{}', new Date({}, {}, {}), new Date({}, {}, {}) ],".format(p,
                                                                                            # b,
                                                                                            ms['date_sufix'],
